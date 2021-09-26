@@ -1,0 +1,8 @@
+ADMIN_USER=admin
+ADMIN_PASSWORD=admin
+
+PASSWORD=demo
+USER=demo
+MYSQL_DB=useraccesportal
+MYSQL_HOST=localhost
+MSQL_PORT=3306
