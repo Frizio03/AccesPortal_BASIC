@@ -25,7 +25,12 @@ const db = mysql.createConnection({
     host: process.env.MYSQL_HOST,
     user: process.env.USER,
     password: process.env.PASSWORD,
-    database: process.env.MYSQL_DB
+    database: "test",
+    port: process.env.MYSQL_PORT
+  })
+  db.connect((err) => {
+    if (err) throw err
+    console.log('DB connected!')
   })
 
 //Define functions
@@ -59,15 +64,51 @@ const loginUser = async (req, res) => {
     }
   }
 
-/* dbQuery(
-    `CREATE TABLE Persons (
-    PersonID int,
-    LastName varchar(255)
-    FirstName varchar(255)
-    age int
-    )`
-)
-*/
+  const subscribeUser = async (req, res) => {
+    try {
+      await dbQuery(
+        `SELECT * FROM users WHERE username = '${username}'`
+        `INSERT INTO Persons (firstName, lastName, email, password)
+        VALUES ("${firstname}", "${lastname}", "${email}", "${password}")`
+      )
+      console.log("User successfully created")
+    } catch (err) {
+      console.log(err)
+      res.render('signup', { message: 'An error has occurred. Please try again' })
+    }
+  }
+
+const seeder = () => {
+  dbQuery(`DROP TABLE Persons`)
+  dbQuery(
+      `CREATE TABLE IF NOT EXISTS Persons (
+      personID int UNIQUE NOT NULL AUTO_INCREMENT,
+      lastName varchar(255),
+      firstName varchar(255),
+      email varchar(255),
+      password varchar(255)
+      )`
+  )
+  dbQuery(
+    `DELETE FROM Persons`
+  )
+  dbQuery(
+    `INSERT INTO Persons (firstName, lastName, email, password)
+    VALUES ("Mario", "Rossi", "mario.rossi@hotmail.com", "DAaccafwyu7qq9de")`
+  )
+  dbQuery(
+    `INSERT INTO Persons (firstName, lastName, email, password)
+    VALUES ("Fabrizio", "Tedeschi", "fabri.tedeschi@gmail.com", "sdjfhsd67ge89de9")`
+  )
+  dbQuery(
+    `INSERT INTO Persons (firstName, lastName, email, password)
+    VALUES ("Gianluca", "Ghinazzi", "gian.luca@hotmail.it", "1234")`
+  )
+  console.log("Tables created and seeded")
+}
+
+seeder()
+
 // Setup static directory to serve
 app.use(express.static(publicDirectoryPath))
 
