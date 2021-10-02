@@ -17,13 +17,15 @@ body {
 footer {
     color: #888888;
     border-top: 1px solid #eeeeee;
-    margin-top: 16px;
+    margin-top: 80px;
     padding: 16px 0;
 }
 
 header {
     margin-top: 16px;
     margin-bottom: 48px;
+    display: flex;
+    justify-content: center;
 }
 
 h1 {

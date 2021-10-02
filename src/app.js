@@ -48,19 +48,25 @@ return new Promise((resolve) => {
 
 const loginUser = async (req, res) => {
     try {
-      console.log(req.body)
-      /* const users = await dbQuery(
-        `SELECT * FROM users WHERE username = '${username}'`
+      const users = await dbQuery(
+        `SELECT * FROM Persons WHERE email="${req.email}"`
       )
+      console.log(req.psw)
       userData = users[0]
-      if (!userData || !(await bcrypt.compare(password, userData.password))) {
-        res.render('login', { message: 'Incorrect username or password' })
-      } else {
-        createToken(userData.id, res)
-      }*/
+      console.log(userData)
+      if (req.email === userData.email && req.psw === userData.password) {
+        res.render('userData', {
+          email: userData.email,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          city: userData.city
+        })
+      } else{
+        res.render('error', { errorMessage: 'Incorrect username or password' })
+      }
     } catch (err) {
       console.log(err)
-      res.render('login', { message: 'An error has occurred. Please try again' })
+      res.render('signup', { errorMessage: 'An error has occurred. Incorrect username or password' })
     }
   }
 
@@ -85,7 +91,8 @@ const seeder = () => {
       personID int UNIQUE NOT NULL AUTO_INCREMENT,
       lastName varchar(255),
       firstName varchar(255),
-      email varchar(255),
+      city varchar(255),
+      email varchar(255) UNIQUE NOT NULL,
       password varchar(255)
       )`
   )
@@ -130,8 +137,7 @@ app.get('/login', (req, res) => {
 
 app.post('/login', (req, res) => {
     console.log(req.body)
-    //loginUser(req, res)
-    res.send({message: "ok", data: req.body})
+    loginUser(req.body, res)
 })
 
 app.get('/signup', (req, res) => {
@@ -139,6 +145,20 @@ app.get('/signup', (req, res) => {
         title: "User Acces Portal",
         author: 'Fabri e Gianlu'
     })
+})
+
+app.post('/signup', (req, res) => {
+  console.log(req.body)
+  res.send({message: "ok", data: req.body})
+})
+
+app.get('/userData', (req, res) => {
+  res.render('userData', {
+    email: "mario.rossi@gmail.com",
+    fisrtName: "Mario",
+    lastName: "Rossi",
+    city: "Milano"
+  })
 })
 
 app.get('*', (req, res) => {
