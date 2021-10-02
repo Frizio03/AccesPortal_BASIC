@@ -100,8 +100,8 @@ const seeder = () => {
     `DELETE FROM Persons`
   )
   dbQuery(
-    `INSERT INTO Persons (firstName, lastName, email, password)
-    VALUES ("Mario", "Rossi", "mario.rossi@hotmail.com", "DAaccafwyu7qq9de")`
+    `INSERT INTO Persons (firstName, lastName, city, email, password)
+    VALUES ("Mario", "Rossi", "Reggio Emilia", "mario.rossi@gmail.com", "red")`
   )
   dbQuery(
     `INSERT INTO Persons (firstName, lastName, email, password)
@@ -110,6 +110,10 @@ const seeder = () => {
   dbQuery(
     `INSERT INTO Persons (firstName, lastName, email, password)
     VALUES ("Gianluca", "Ghinazzi", "gian.luca@hotmail.it", "1234")`
+  )
+  dbQuery(
+    `INSERT INTO Persons (firstName, lastName, city, email, password)
+    VALUES ("Luca", "Bianchi", "Milano", "luca.bianchi@gmail.com", "white")`
   )
   console.log("Tables created and seeded")
 }
