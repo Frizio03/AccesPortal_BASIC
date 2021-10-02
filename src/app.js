@@ -51,9 +51,9 @@ const loginUser = async (req, res) => {
       const users = await dbQuery(
         `SELECT * FROM Persons WHERE email="${req.email}"`
       )
-      console.log(req.psw)
+      //console.log(req.psw)
       userData = users[0]
-      console.log(userData)
+      //console.log(userData)
       if (req.email === userData.email && req.psw === userData.password) {
         res.render('userData', {
           email: userData.email,
@@ -72,12 +72,21 @@ const loginUser = async (req, res) => {
 
   const subscribeUser = async (req, res) => {
     try {
-      await dbQuery(
-        `SELECT * FROM users WHERE username = '${username}'`
-        `INSERT INTO Persons (firstName, lastName, email, password)
-        VALUES ("${firstname}", "${lastname}", "${email}", "${password}")`
+      const users = await dbQuery(
+        `SELECT * FROM Persons WHERE email="${req.email}"`
       )
-      console.log("User successfully created")
+      userData = users[0]
+      console.log(users)
+      if(users === []){
+        res.render('error', { errorMessage: 'This email is already subscribed' })
+      }
+      else{
+        await dbQuery(
+          `INSERT INTO Persons (firstName, lastName, city, email, password)
+          VALUES ("${req.name}", "${req.surname}", "${req.city}", "${req.email}", "${req.psw}")`
+        )
+        res.render('success', {message: "User succesfully subscribed!!"})
+      }
     } catch (err) {
       console.log(err)
       res.render('signup', { message: 'An error has occurred. Please try again' })
@@ -140,7 +149,7 @@ app.get('/login', (req, res) => {
 })
 
 app.post('/login', (req, res) => {
-    console.log(req.body)
+    //console.log(req.body)
     loginUser(req.body, res)
 })
 
@@ -153,17 +162,9 @@ app.get('/signup', (req, res) => {
 
 app.post('/signup', (req, res) => {
   console.log(req.body)
-  res.send({message: "ok", data: req.body})
+  subscribeUser(req.body, res)
 })
 
-app.get('/userData', (req, res) => {
-  res.render('userData', {
-    email: "mario.rossi@gmail.com",
-    fisrtName: "Mario",
-    lastName: "Rossi",
-    city: "Milano"
-  })
-})
 
 app.get('*', (req, res) => {
     res.render('404', {
